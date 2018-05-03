@@ -1,0 +1,2 @@
+# pureftp
+Pureftp docker image.
