@@ -16,4 +16,6 @@ ENV FTP_USER=qpsdemo \
 COPY run.sh /pure-ftpd/run.sh
 RUN chmod u+x /pure-ftpd/run.sh
 
+RUN chmod -R a+rw /share/ftp/
+
 CMD ["/pure-ftpd/run.sh"] 
