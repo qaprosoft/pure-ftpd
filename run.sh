@@ -1,11 +1,22 @@
 #!/bin/sh
 
+if [ "${LOG_ENABLED}" = "1" ]; then
+    set -x
+fi
 
 echo "##############################################################################"
 echo "Starting container"
 echo "##############################################################################"
 
 ADDED_OPTS=""
+
+#
+# Updating ftp user home permissions
+#
+if [ ! -d ${FTP_HOME_DIRECTORY} ]; then
+    mkdir -p "${FTP_HOME_DIRECTORY}"
+fi
+chown -R ${CONTAINER_USER_UID}:${CONTAINER_GROUP_UID} ${FTP_HOME_DIRECTORY}
 
 #
 # Checking password file
@@ -15,6 +26,7 @@ if [ ! -f /etc/pure-ftpd/pureftpd.passwd ]; then
     echo "${FTP_PASSWORD}\n${FTP_PASSWORD}" \
         | pure-pw useradd ${FTP_USER} \
                 -u ${CONTAINER_USER_UID} \
+		-g ${CONTAINER_GROUP_UID} \
                 -d ${FTP_HOME_DIRECTORY} \
                 -t ${DOWNLOAD_LIMIT_KB} \
                 -T ${UPLOAD_LIMIT_KB} \
